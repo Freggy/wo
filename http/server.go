@@ -1,6 +1,6 @@
 package http
 
-import "wo/storage/blobstore"
+import "github.com/freggy/wo/storage/blobstore"
 
 type Server struct {
 	blobdriver blobstore.Driver
