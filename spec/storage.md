@@ -36,15 +36,15 @@ maps
 Configs
 -------
 
-Each configuration file is stored under `/configs/<digest>`
+Each configuration file is stored under `/configs/<digest>`.
 
 ```
 <digest of content>
-└── config.b64
+└── config
 
 configs
 ├── 6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090
-│   └── config.b64
+│   └── config
 └── ...
 ```
 
@@ -61,4 +61,27 @@ tags
         ├── 2.0.0.json
         └── ...
 ```
+
+Metadata
+--------
+
+Metadata for each map is stored under `/metadata/<repository>/<map_name>`.
+
+The content of the metadata file is in plain ini-like style:
+
+```
+<key>=<value>
+<key>=<value>
+<key>=<value>
+```
+
+Each line represents one key value pair.
+
+```
+metadata
+└── my-repository
+    └── my-map
+        └── metadata
+```
+
 
