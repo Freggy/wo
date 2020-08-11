@@ -6,6 +6,16 @@
 
 `TODO`
 
+### Get version of the registry
+
+```
+GET /<major_version>
+```
+
+Returns 
+* `200 OK` if the registry implements `major_version`
+* `404 Not Found` if the registry does not implement `major_version`
+
 ### Upload a map blob
 
 Uploads a map blob to the registry.
