@@ -1,6 +1,9 @@
 ### Authentication
 
-`TODO`
+For now only basic auth is possible. In the future it will be possible to use JWT tokens for authentication.
+
+Provide the `Authorization: Basic <credentials>` header in requests made to the registry. 
+If the credentials are invalid the server will respond with `401 Unauthorized`.
 
 ### Errors
 
@@ -18,14 +21,14 @@ Returns
 
 ### Upload a map blob
 
-Uploads a map blob to the registry.
-
 ```
 PUT /blobs/upload
 Content-Type: application/octet-stream
 
 <map binary data>
 ```
+
+Uploads a map blob to the registry.
 
 If the upload succeeded the response will contain a `201 Created`. When the blob already exists the response will contain `409 Conflict`.
 The response will always provide the map digest in the `Wo-Map-Digest`.
@@ -37,14 +40,14 @@ Wo-Map-Digest: <digest>
 
 ### Upload a config file
 
-Uploads a config to the registry.
-
 ```
 PUT /configs/upload
 Content-Type: text/plain
 
 <config text data>
 ```
+
+Uploads a config to the registry.
 
 If the upload succeeded the response will contain a `201 Created`. When the blob already exists the response will contain `409 Conflict`.
 The response will always provide the map digest in the `Wo-Config-Digest`.
@@ -56,8 +59,6 @@ Wo-Config-Digest: <digest>
 
 ### Create a tag
 
-Creates a tag referencing the given map and config digest.
-
 ```
 PUT /<repository>/<map>/<tag_id>
 Content-Type: application/json
@@ -68,12 +69,12 @@ Content-Type: application/json
 }
 ```
 
+Creates a tag referencing the given map and config digest.
+
 If the upload succeeded the response will contain a `201 Created`. When the blob already exists the response will contain `409 Conflict`. 
 `404 Not Found` is returned when either `config_digest` or `map_digest` point to an invalid or non existing reference.
 
 ### Set/update map metadata
-
-This endpoint can be used to set or update custom metadata about a specific map. Only simple key value pairs are possible. Nested keys will be ignored.
 
 ```
 PUT /<repository>/<map>/metadata
@@ -83,15 +84,17 @@ key1=value1 key2=value2
 ...
 ```
 
+This endpoint can be used to set or update custom metadata about a specific map. Only simple key value pairs are possible.
+
 Successful request will return `200 OK`. If either `<repository>` or `<map>` could not be found `404 Not Found` is returned.
 
 ### Get map metadata
 
-Retrieves the value of a given key of map specific metadata.
-
 ```
 GET /<repository>/<map>/metadata/<key>
 ```
+
+Retrieves the value of a given key of map specific metadata.
 
 Return `200 OK` if key can be found. `404 Not Found` when key does not exist.
 
@@ -104,16 +107,16 @@ Content-Type: text/plain
 
 ### Get map by tag
 
+```
+GET /<repository>/<map>/<tag_id>
+```
+
 All the content referenced by this tag will be returned in a gzipped tarball in the form of
 
 ```
 ├── map
 ├── metadata
 └── config
-```
-
-```
-GET /<repository>/<map>/<tag_id>
 ```
 
 The client will receive a `404 Not Found` if the specified tag does not exist.
@@ -126,13 +129,11 @@ The client will receive a `404 Not Found` if the specified tag does not exist.
 
 ### Delete map metadata
 
-Delete map specific metadata
-
 ```
 DELETE /<repository>/<map>/metadata/<key>
 ```
 
+Delete map specific metadata
+
 Returns `200 OK` if successful. 
-
-
 
