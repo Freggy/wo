@@ -1,14 +1,8 @@
 package driver
 
 import (
-	"errors"
 	"io/ioutil"
 	"os"
-)
-
-var (
-	ErrReadPathIsDir = errors.New("file to read is a directory")
-	ErrBlobAlreadyExists = errors.New("blob already exists")
 )
 
 type filesystemDriver struct {
@@ -21,7 +15,7 @@ func (fd *filesystemDriver) Read(path string) ([]byte, error) {
 	}
 
 	if info.IsDir() {
-		return nil, ErrReadPathIsDir
+		return nil, ErrPathIsDir
 	}
 
 	content, err := ioutil.ReadFile(path)
@@ -33,13 +27,17 @@ func (fd *filesystemDriver) Read(path string) ([]byte, error) {
 }
 
 func (fd *filesystemDriver) Write(path string, content []byte) error {
-	if _, err := os.OpenFile(path, os.O_CREATE, os.ModePerm); os.IsExist(err) {
-		return ErrBlobAlreadyExists
+	info, err := os.Stat(path)
+	if err != nil {
+		return err
+	}
+
+	if info.IsDir() {
+		return ErrPathIsDir
 	}
 
 	if err := ioutil.WriteFile(path, content, os.ModePerm); err != nil {
 		return err
 	}
-
 	return nil
 }
