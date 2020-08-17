@@ -41,3 +41,14 @@ func (fd *filesystemDriver) Write(path string, content []byte) error {
 	}
 	return nil
 }
+
+func (fd *filesystemDriver) Exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) { // does not exist
+		return false, nil
+	} else if !os.IsNotExist(err) { // does exist
+		return true, nil
+	} else {
+		return false, err
+	}
+}

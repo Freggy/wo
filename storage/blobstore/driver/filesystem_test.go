@@ -11,7 +11,7 @@ import (
 
 var (
 	filePath = "/tmp/wo-fs/file"
-	dirPath = "/tmp/wo-fs/dir"
+	dirPath  = "/tmp/wo-fs/dir"
 )
 
 func TestFilesystemDriverRead(t *testing.T) {
@@ -59,12 +59,32 @@ func TestFilesystemDriverWriteDirectory(t *testing.T) {
 	setupDir(t, dirPath)
 	driver := filesystemDriver{}
 
-	err := driver.Write(dirPath, []byte("helloworld"));
+	err := driver.Write(dirPath, []byte("helloworld"))
 	if err == nil {
 		t.Fatal("error expected")
 	}
 
 	assert.EqualError(t, ErrPathIsDir, err.Error())
+}
+
+func TestFilesystemDriverFileExists(t *testing.T) {
+	setupDir(t, filePath)
+	driver := filesystemDriver{}
+	ok, err := driver.Exists(filePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, true, ok)
+}
+
+func TestFilesystemDriverFileNotExist(t *testing.T) {
+	setupDir(t, filePath)
+	driver := filesystemDriver{}
+	ok, err := driver.Exists(dirPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, false, ok)
 }
 
 func setupFile(t *testing.T, path string) {
@@ -98,4 +118,3 @@ func setupDir(t *testing.T, path string) {
 		log.Fatal(err)
 	}
 }
-
