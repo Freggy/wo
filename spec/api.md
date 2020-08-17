@@ -7,7 +7,13 @@ If the credentials are invalid the server will respond with `401 Unauthorized`.
 
 ### Errors
 
-`TODO`
+Every response with status code within `4xx` or `5xx` will contain an error object to provide error related information.
+
+```JSON
+{
+  "msg": "this is an error"
+}
+```
 
 ### Get version of the registry
 
